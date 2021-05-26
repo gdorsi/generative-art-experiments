@@ -31,7 +31,7 @@ function render() {
         create("rect", {
           height: 200,
           width: end - start,
-          fill: hsl(hue, random(50, 100), random(0, 100)),
+          fill: i > 0 ? hsl(hue, random(50, 100), random(0, 100)) : hsl(random(180, 200), 40, 40),
           x: start,
           y: 0,
           style:
@@ -47,7 +47,7 @@ function render() {
       .map(() => [random(0, 600), random(0, 200), random(1, 20)])
       .map(([x, y, radius]) =>
         create("circle", {
-          fill: hsl(hue, random(50, 100), random(0, 100)),
+          fill: hsl(random(10, 40), random(50, 80), random(0, 60)),
           cx: x,
           cy: y,
           r: radius,
