@@ -12,8 +12,17 @@ function render() {
     preserveAspectRatio: "xMidYMid slice"
   });
 
+  canvas.innerHTML = `
+    <filter id="displacementFilter">
+      <feTurbulence type="turbulence" baseFrequency="0.05"
+          numOctaves="2" result="turbulence"/>
+      <feDisplacementMap in2="turbulence" in="SourceGraphic"
+          scale="50" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  `;
+
   for (let i of range(0, 4)) {
-    const hue = random(30, 50);
+    const hue = random(10, 40);
 
     const stripes = range(0, 400, () => random(3 * i, 10 + 5 * i))
       .map((value, i, array) => [value, array[i + 1]])
@@ -27,7 +36,7 @@ function render() {
           y: 0,
           style:
             i > 0
-              ? `opacity: 0.5; transform: rotate(${random(-1,1,true)}deg)`
+              ? `opacity: 0.5; filter: url(#displacementFilter)`
               : null,
         })
       );
