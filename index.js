@@ -13,49 +13,44 @@ function render() {
   });
 
   canvas.innerHTML = `
-    <filter id="displacementFilter">
-      <feTurbulence type="turbulence" baseFrequency="0.05"
-          numOctaves="2" result="turbulence"/>
+    <filter id="clouds">
+      <feTurbulence type="turbulence" baseFrequency="0.02"
+          numOctaves="5" result="turbulence"/>
       <feDisplacementMap in2="turbulence" in="SourceGraphic"
-          scale="50" xChannelSelector="R" yChannelSelector="G"/>
+          scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="suns">
+      <feTurbulence type="turbulence" baseFrequency="0.1"
+          numOctaves="3" result="turbulence"/>
+      <feDisplacementMap in2="turbulence" in="SourceGraphic"
+          scale="2" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   `;
 
-  for (let i of range(0, 4)) {
-    const hue = random(10, 40);
-
-    const stripes = range(0, 200, () => random(3 * i, 10 + 5 * i))
-      .map((value, i, array) => [value, array[i + 1]])
-      .filter(([, end]) => end !== undefined)
-      .map(([start, end]) =>
+  const stripes = range(0, 300, () => random(5, 15))
+    .map((value, i, array) => [value, array[i + 1]])
+    .filter(([, end]) => end !== undefined)
+    .map(([start, end]) =>
         create("rect", {
-          height: end - start,
+          height: (end - start) + 5,
           width: 400,
-          fill: i > 0 ? hsl(hue, random(50, 100), random(0, 100)) : hsl(random(180, 200), 40, 40),
+          fill: hsl(random([random(10, 40), random(180, 200)]), 60, random(30, 65)),
+          stroke: hsl(random(20, 40), 50, random(80, 90)),
           x: 0,
-          y: start,
-          style:
-            i > 0
-              ? `opacity: 0.5; filter: url(#displacementFilter)`
-              : null,
-        })
-      );
+          y: start - 5,
+          style: `filter: url(#clouds)`,
+        }),
+    );
 
-    canvas.append(...stripes);
+  canvas.append(...stripes);
 
-    const circles = range(0, 30)
-      .map(() => [random(0, 600), random(0, 200), random(1, 20)])
-      .map(([x, y, radius]) =>
-        create("circle", {
-          fill: hsl(random(10, 40), random(50, 80), random(0, 60)),
-          cx: x,
-          cy: y,
-          r: radius,
-        })
-      );
-
-    canvas.append(...circles);
-  }
+  canvas.append(create("circle", {
+    fill: hsl(10, random(50, 80), random(40, 60)),
+    cx: random(250, 300),
+    cy: 50,
+    r: random(10, 20),
+    style: `filter: url(#suns)`,
+  }))
 
   document.body.appendChild(canvas);
 }
