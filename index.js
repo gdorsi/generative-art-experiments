@@ -24,16 +24,16 @@ function render() {
   for (let i of range(0, 4)) {
     const hue = random(10, 40);
 
-    const stripes = range(0, 400, () => random(3 * i, 10 + 5 * i))
+    const stripes = range(0, 200, () => random(3 * i, 10 + 5 * i))
       .map((value, i, array) => [value, array[i + 1]])
       .filter(([, end]) => end !== undefined)
       .map(([start, end]) =>
         create("rect", {
-          height: 200,
-          width: end - start,
+          height: end - start,
+          width: 400,
           fill: i > 0 ? hsl(hue, random(50, 100), random(0, 100)) : hsl(random(180, 200), 40, 40),
-          x: start,
-          y: 0,
+          x: 0,
+          y: start,
           style:
             i > 0
               ? `opacity: 0.5; filter: url(#displacementFilter)`
